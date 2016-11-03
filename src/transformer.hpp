@@ -39,10 +39,12 @@ namespace trans {
     llvm::Type* shortTy_;
     llvm::Type* intTy_;
     llvm::Type* longTy_;
+    llvm::Type* longPtrTy_;
     llvm::Type* strTy_;
     const bool kVariadic_ = true;
-    const bool kNotSigned = false;
-    const char* kAlloca = "alloca";
+    const bool kNotVariadic_ = false;
+    const bool kNotSigned_ = false;
+    const char* kAlloca_ = "alloca_handler";
 
     llvm::Function* GetFunc(std::string name);
     llvm::Constant* GetSpec(llvm::Type* ty);

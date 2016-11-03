@@ -15,7 +15,7 @@ void bubble_sort(int arr[], int array_size)
     }
 }   
 
-void driver() {
+int main() {
   const int array_size = 10;
   int arr[array_size];
   bubble_sort(arr, array_size);

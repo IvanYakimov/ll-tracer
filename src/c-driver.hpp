@@ -5,7 +5,12 @@
 #ifndef __C_DRIVER__
 #define __C_DRIVER__
 
+#include "engine.hpp"
+
 extern "C" {
+  void alloca_handler(long* pointer, int type_specifier);
 }
+
+void cpp__alloca_handler(long *pointer, int type_specifier);
 
 #endif

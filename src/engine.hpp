@@ -5,8 +5,12 @@
 #ifndef __ENGINE__
 #define __ENGINE__
 
+#include <iostream>
+
 namespace engine {
   class Engine {
+  public:
+    static void Alloca(long *pointer, int type_specifier);
   };
 };
 

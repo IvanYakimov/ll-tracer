@@ -10,6 +10,9 @@ OBJ = $(SRC:.cpp=.o)
 BENCH_C = $(shell cd ../bench && ls *.c)
 BENCH_IR = $(BENCH_C:.c=.ll)
 
+ENGINE = c-driver.o engine.o
+TRANSFORMER = tracer-pass.o transformer.o
+
 CXX = g++
 CXXFLAGS = -fdiagnostics-color=always -g -std=c++11 -fpic -rdynamic -Wno-deprecated
 LDFLAGS = 
@@ -24,13 +27,16 @@ BENCH_DIR = ../bench
 vpath %.cpp $(SRCDIR)
 vpath %.c $(BENCH_DIR)
 
-program.so: shared.o
+#engine.a: $(ENGINE)
+#	ar -rc $^
+
+trans.so: trans.o
 	$(CXX) -shared $< -o $@ $(CXXFLAGS)
 
-shared.o: $(OBJ) $(LLVM_PASS) $(TRANSFORMER)
+trans.o: $(TRANSFORMER) 
 	ld -r $^ -o $@ $(LLVM_LDDYNAMIC)
 
-transformer.out: $(TRANSFORMER)
+trans.out: $(TRANSFORMER)
 	$(CXX) $^ -o $@ $(CXXFLAGS) $(LLVM_CXXDYNAMIC) 
 
 $(OBJ):
@@ -39,7 +45,8 @@ $(OBJ):
 
 $(BENCH_IR):
 %.ll: %.c
-	$(CLANG) -c $< -o $@ 
+	$(CLANG) -c $< -o $@
+
 
 .PHONY: clean
 clean:

@@ -2,11 +2,14 @@
 #define __TRACER_PASS__
 
 /// llvm
-# include "llvm/Pass.h"
-# include "llvm/Support/raw_ostream.h"
+#include "llvm/Pass.h"
+#include "llvm/Support/raw_ostream.h"
+#include "llvm/Support/FileSystem.h"
 
 /// the project
 #include "transformer.hpp"
+
+#include <system_error>
 
 namespace {
   struct TracerPass : public llvm::ModulePass {

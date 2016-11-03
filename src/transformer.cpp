@@ -16,11 +16,12 @@ namespace trans {
     shortTy_ = Type::getInt16Ty(context);
     intTy_ = Type::getInt32Ty(context);
     longTy_ = Type::getInt64Ty(context);
+    longPtrTy_ = Type::getInt64PtrTy(context);
     strTy_ = Type::getInt8PtrTy(context);
 
     // Init mappings
     auto init_spec = [=] (TypeSpec id) {
-      auto spec = ConstantInt::get(intTy_, (int)id, kNotSigned);
+      auto spec = ConstantInt::get(intTy_, (int)id, kNotSigned_);
       spec_table_.emplace(id, spec);
     };
     std::vector<TypeSpec> spec_arr = {TypeSpec::kI8Ty, TypeSpec::kI16Ty, TypeSpec::kI32Ty, TypeSpec::kI64Ty,
@@ -70,12 +71,13 @@ namespace trans {
 
   Value* Transformer::Instrument(Instruction* target, Function* func, FuncOps ops) {
     //errs() << target << "\n";
-    Instruction* call = CallInst::Create(func, ops);
-    call->insertAfter(target);
   }
 
   void Transformer::DeclareAlloca() {
-    DeclareFunc(voidTy_, kAlloca, {intTy_}, kVariadic_);
+    Type* ptr = longPtrTy_,
+      * tag = intTy_,
+      * format = strTy_;
+    DeclareFunc(voidTy_, kAlloca_, {ptr, tag}, kNotVariadic_);
   }
   
   void Transformer::DeclarePush() {
@@ -87,34 +89,38 @@ namespace trans {
   }
 
   void Transformer::visitReturnInst(llvm::ReturnInst &return_inst) {
-    errs() << "ret\n";
   }
   
   void Transformer::visitAllocaInst(llvm::AllocaInst &alloca) {
-    errs() << "alloca\n";
-    string target;
-    raw_string_ostream rso(target);
     Type* allocated_type = alloca.getAllocatedType();
+    bool isInt = allocated_type->isIntegerTy(),
+      isArr = allocated_type->isArrayTy();
+
+    if (not (isInt or isArr))
+      return;
+
     if (allocated_type->isIntegerTy()) {
+      auto handler = GetFunc(kAlloca_);
       auto spec = GetSpec(allocated_type);
-      auto func = GetFunc(kAlloca);
-      FuncOps ops = {spec, &alloca};
-      Instrument(&alloca, func, ops);
+      Constant* addr = ConstantInt::get(longTy_, 42, kNotSigned_);
+      Instruction* cast = new BitCastInst(&alloca, longPtrTy_);
+      cast->insertAfter(&alloca);
+      FuncOps ops = {cast, spec};
+      Instruction* call = CallInst::Create(handler, ops);
+      call->insertAfter(cast);
     }
     else if (allocated_type->isArrayTy()) {
-      auto spec = GetSpec(allocated_type);
-      auto func = GetFunc(kAlloca);
-      FuncOps ops = {spec};
+      string target;
+      raw_string_ostream rso(target);
       rso << *allocated_type;
-      errs() << rso.str().c_str() << "\n";
+      //errs() << rso.str().c_str() << "\n";
+      //TODO:
     }
   }
   
   void Transformer::visitCallInst(llvm::CallInst &call) {
-    errs() << "call\n";
   }
 
   void Transformer::visitBasicBlock(llvm::BasicBlock &block) {
-    errs() << "bb\n";
   }
 };
