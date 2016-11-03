@@ -3,3 +3,7 @@
 // e-mail: ivan.yakimov.research@yandex.ru
 
 #include "c-driver.hpp"
+
+extern "C" {
+}
+

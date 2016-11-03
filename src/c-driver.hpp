@@ -6,7 +6,6 @@
 #define __C_DRIVER__
 
 extern "C" {
-  //
 }
 
 #endif
