@@ -4,14 +4,19 @@
 
 SHELL = /bin/bash
 
-SRC = $(shell cd ../src && ls *.cpp)
-OBJ = $(SRC:.cpp=.o)
+SRCDIR = ../src
+BENCH_DIR = ../bench
 
-BENCH_C = $(shell cd ../bench && ls *.c)
+BENCH_C = $(shell cd $(BENCH_DIR) && ls *.c)
 BENCH_IR = $(BENCH_C:.c=.ll)
 
-ENGINE = c-driver.o engine.o
-TRANSFORMER = tracer-pass.o transformer.o
+DISPLAY_SRC = $(shell cd $(SRCDIR)/display && ls *.cpp)
+ENGINE = $(DISPLAY_SRC:.cpp=.o)
+
+TRANS_SRC = $(shell cd $(SRCDIR)/trans && ls *.cpp)
+TRANSFORMER = $(TRANS_SRC:.cpp=.o)
+
+OBJ = $(ENGINE) $(TRANSFORMER)
 
 CXX = g++
 CXXFLAGS = -fdiagnostics-color=always -g -std=c++11 -fpic -rdynamic -Wno-deprecated
@@ -21,14 +26,8 @@ LLVM_LDDYNAMIC = $(shell llvm-config --ldflags)
 DBGFLAGS = -U NDEBUG
 CLANG = clang -S -emit-llvm -O0 -Wint-conversion
 
-SRCDIR = ../src
-BENCH_DIR = ../bench
-
-vpath %.cpp $(SRCDIR)
+vpath %.cpp $(SRCDIR)/display $(SRCDIR)/trans
 vpath %.c $(BENCH_DIR)
-
-#engine.a: $(ENGINE)
-#	ar -rc $^
 
 trans.so: trans.o
 	$(CXX) -shared $< -o $@ $(CXXFLAGS)
@@ -46,7 +45,6 @@ $(OBJ):
 $(BENCH_IR):
 %.ll: %.c
 	$(CLANG) -c $< -o $@
-
 
 .PHONY: clean
 clean:
