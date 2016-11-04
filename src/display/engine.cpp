@@ -6,6 +6,14 @@
 
 namespace engine {
   void Engine::Alloca(long *pointer, std::string type_specifier) {     
-    std::cout << "allocated: " << type_specifier << "\n";
+  }
+
+  void Engine::Return() {
+  }
+  
+  void Engine::Call() {
+  }
+  
+  void Engine::BlockEnd() {
   }
 };

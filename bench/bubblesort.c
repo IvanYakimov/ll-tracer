@@ -17,6 +17,6 @@ void bubble_sort(int arr[], int array_size)
 
 int main() {
   const int array_size = 10;
-  int arr[array_size];
+  int arr[array_size] = {9,8,7,6,5,4,3,2,1,0};
   bubble_sort(arr, array_size);
 }

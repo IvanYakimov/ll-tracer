@@ -7,7 +7,8 @@
 #include "llvm/Support/FileSystem.h"
 
 /// the project
-#include "transformer.hpp"
+#include "alloca-transformer.hpp"
+#include "control-transformer.hpp"
 
 #include <system_error>
 

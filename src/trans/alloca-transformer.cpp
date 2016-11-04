@@ -7,20 +7,14 @@
 namespace trans {
   using namespace llvm;
   using std::string;
-  Transformer::Transformer(Module& module) : TransformerHelper(module) {
+  AllocaTransformer::AllocaTransformer(Module& module) : TransformerHelper(module) {
     // Declare functions
-    DeclareAlloca();
+    DeclareFunc(voidTy_, kAlloca_, {longPtrTy_, charPtrTy_}, kNotVariadic_);
   }
 
-  Transformer::~Transformer() {}
+  AllocaTransformer::~AllocaTransformer() {}
 
-  void Transformer::DeclareAlloca() {
-    Type* ptr = longPtrTy_,
-      * format = charPtrTy_;
-    DeclareFunc(voidTy_, kAlloca_, {ptr, format}, kNotVariadic_);
-  }
-
-  llvm::Constant* Transformer::LazySpecification(llvm::Type* allocated_type) {
+  llvm::Constant* AllocaTransformer::LazySpecification(llvm::Type* allocated_type) {
     string buffer;
     raw_string_ostream type_ss(buffer);
     type_ss << *allocated_type;
@@ -49,7 +43,7 @@ namespace trans {
     }
   }
   
-  void Transformer::visitAllocaInst(llvm::AllocaInst &alloca) {
+  void AllocaTransformer::visitAllocaInst(llvm::AllocaInst &alloca) {
     Type* allocated_type = alloca.getAllocatedType();
     bool isInt = allocated_type->isIntegerTy(),
       isArr = allocated_type->isArrayTy();

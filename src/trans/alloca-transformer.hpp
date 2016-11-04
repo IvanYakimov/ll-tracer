@@ -17,8 +17,8 @@ namespace trans {
     
   private:
     const char* kAlloca_ = "alloca_handler";
+    //TODO: not only lazy, but singleton!
     llvm::Constant* LazySpecification(llvm::Type* ty);
-    void DeclareAlloca();
   };
 };
 

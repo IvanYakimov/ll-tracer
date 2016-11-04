@@ -48,7 +48,8 @@ $(BENCH_IR):
 
 .PHONY: clean
 clean:
-	@rm -vf $(SRCDIR)/*~
+	@rm -vf $(SRCDIR)/trans/*~
+	@rm -vf $(SRCDIR)/display/*~	
 	@rm -vf $(BENCH_DIR)/*~
 	@rm -vf *~ *.o *.out *.so
 	@rm -vf *.ll 

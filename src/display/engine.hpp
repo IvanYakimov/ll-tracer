@@ -12,6 +12,9 @@ namespace engine {
   class Engine {
   public:
     static void Alloca(long *pointer, std::string type_specifier);
+    static void Return();
+    static void Call();
+    static void BlockEnd();
   };
 };
 
