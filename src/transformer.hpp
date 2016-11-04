@@ -36,11 +36,11 @@ namespace trans {
     llvm::Type* voidTy_;
     llvm::Type* boolTy_;
     llvm::Type* charTy_;
+    llvm::Type* charPtrTy_;
     llvm::Type* shortTy_;
     llvm::Type* intTy_;
     llvm::Type* longTy_;
     llvm::Type* longPtrTy_;
-    llvm::Type* strTy_;
     const bool kVariadic_ = true;
     const bool kNotVariadic_ = false;
     const bool kNotSigned_ = false;

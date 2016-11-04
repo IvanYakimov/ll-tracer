@@ -13,11 +13,11 @@ namespace trans {
     voidTy_ = Type::getVoidTy(context);
     boolTy_ = Type::getInt1Ty(context);
     charTy_ = Type::getInt8Ty(context);
+    charPtrTy_ = Type::getInt8PtrTy(context);
     shortTy_ = Type::getInt16Ty(context);
     intTy_ = Type::getInt32Ty(context);
     longTy_ = Type::getInt64Ty(context);
     longPtrTy_ = Type::getInt64PtrTy(context);
-    strTy_ = Type::getInt8PtrTy(context);
 
     // Init mappings
     auto init_spec = [=] (TypeSpec id) {
@@ -76,7 +76,7 @@ namespace trans {
   void Transformer::DeclareAlloca() {
     Type* ptr = longPtrTy_,
       * tag = intTy_,
-      * format = strTy_;
+      * format = charPtrTy_;
     DeclareFunc(voidTy_, kAlloca_, {ptr, tag}, kNotVariadic_);
   }
   
@@ -110,9 +110,28 @@ namespace trans {
       call->insertAfter(cast);
     }
     else if (allocated_type->isArrayTy()) {
-      string target;
-      raw_string_ostream rso(target);
-      rso << *allocated_type;
+      string buffer;
+      raw_string_ostream type_ss(buffer);
+      type_ss << *allocated_type;
+      auto type_str = type_ss.str();
+      //      errs() << "ARRAY INITIALIZER: " << buffer.c_str() << "\n";
+      //TODO: lazy initialization (+ memoization):
+      auto len = type_str.length() + 1;
+      errs() << "STR: " << type_str << "\n";
+      errs() << "LEN: " << len << "\n";
+      auto arr_ty = ArrayType::get(charTy_, len);
+      GlobalVariable* gvar_array_str = new GlobalVariable(module_, arr_ty, true, GlobalValue::PrivateLinkage, 0, ".str");
+      gvar_array_str->setAlignment(1);
+      Constant* const_array = ConstantDataArray::getString(module_.getContext(), type_str.c_str(), true);
+      gvar_array_str->setInitializer(const_array);
+      GlobalVariable* gvar_ptr = new GlobalVariable(module_, charPtrTy_, false, GlobalValue::ExternalLinkage, 0, "buff");
+      gvar_ptr->setAlignment(8);
+      std::vector<Constant*> const_ptr_indices;
+      ConstantInt* zero = ConstantInt::get(module_.getContext(), APInt(32, StringRef("0"), 10));
+      const_ptr_indices.push_back(zero);
+      const_ptr_indices.push_back(zero);
+      Constant* const_ptr = ConstantExpr::getGetElementPtr(gvar_array_str, const_ptr_indices);
+      gvar_ptr->setInitializer(const_ptr);
       //errs() << rso.str().c_str() << "\n";
       //TODO:
     }
