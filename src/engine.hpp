@@ -6,11 +6,12 @@
 #define __ENGINE__
 
 #include <iostream>
+#include <string>
 
 namespace engine {
   class Engine {
   public:
-    static void Alloca(long *pointer, int type_specifier);
+    static void Alloca(long *pointer, std::string type_specifier);
   };
 };
 
