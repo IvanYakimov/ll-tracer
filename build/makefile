@@ -28,6 +28,7 @@ CLANG = clang -S -emit-llvm -O0 -Wint-conversion
 
 vpath %.cpp $(SRCDIR)/display $(SRCDIR)/trans
 vpath %.c $(BENCH_DIR)
+vpath %.ll .
 
 trans.so: trans.o
 	$(CXX) -shared $< -o $@ $(CXXFLAGS)
@@ -45,6 +46,17 @@ $(OBJ):
 $(BENCH_IR):
 %.ll: %.c
 	$(CLANG) -c $< -o $@
+
+.PHONY: display-objects
+display: $(ENGINE)
+	@echo "done"
+
+dummy.o:
+	clang -c dummy.ll -o dummy.o
+
+# TODO: replace dummy.o by some meaningful
+display.out: $(ENGINE) dummy.o
+	$(CXX) $^ -o $@ $(CXXFLAGS)
 
 .PHONY: clean
 clean:

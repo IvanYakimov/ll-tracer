@@ -25,17 +25,17 @@ extern "C" {
 using namespace engine;
 
 void cpp__alloca_handler(long *pointer, char* type_specifier) {
-  Engine::Alloca(pointer, std::string(type_specifier));
+  GetEngine()->Alloca(pointer, type_specifier);
 }
 
 void cpp__return_handler() {
-  Engine::Return();
+  GetEngine()->Return();
 }
 
 void cpp__call_handler() {
-  Engine::Call();
+  GetEngine()->Call();
 }
 
 void cpp__block_handler() {
-  Engine::BlockEnd();
+  GetEngine()->BlockEnd();
 }

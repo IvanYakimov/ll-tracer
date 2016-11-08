@@ -7,14 +7,23 @@
 
 #include <iostream>
 #include <string>
+#include <memory>
+
+// project:
+#include "declarations.hpp"
+#include "printer-factory.hpp"
 
 namespace engine {
+  class Engine;
+  using EnginePtr = std::shared_ptr<Engine>;
+  EnginePtr GetEngine();
   class Engine {
+    PrinterFactory factory_;
   public:
-    static void Alloca(long *pointer, std::string type_specifier);
-    static void Return();
-    static void Call();
-    static void BlockEnd();
+    void Alloca(long *pointer, const char* type_specifier);
+    void Return();
+    void Call();
+    void BlockEnd();
   };
 };
 

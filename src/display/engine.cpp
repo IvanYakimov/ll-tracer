@@ -5,7 +5,15 @@
 #include "engine.hpp"
 
 namespace engine {
-  void Engine::Alloca(long *pointer, std::string type_specifier) {     
+  EnginePtr GetEngine() {
+    static EnginePtr engine = nullptr;
+    if (engine == nullptr)
+      engine = std::make_shared<Engine>();
+    return engine;
+  }
+  
+  void Engine::Alloca(long *pointer, const char* type_specifier) {
+    auto printer = factory_.GetPrinter(type_specifier);
   }
 
   void Engine::Return() {
