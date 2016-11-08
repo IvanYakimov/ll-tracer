@@ -44,6 +44,7 @@ namespace trans {
   }
   
   void AllocaTransformer::visitAllocaInst(llvm::AllocaInst &alloca) {
+    errs() << alloca.getName() << "\n";
     Type* allocated_type = alloca.getAllocatedType();
     bool isInt = allocated_type->isIntegerTy(),
       isArr = allocated_type->isArrayTy();

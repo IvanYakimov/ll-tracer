@@ -12,6 +12,7 @@
 // project:
 #include "declarations.hpp"
 #include "printer-factory.hpp"
+#include "frame-stack.hpp"
 
 namespace engine {
   class Engine;
@@ -19,8 +20,9 @@ namespace engine {
   EnginePtr GetEngine();
   class Engine {
     PrinterFactory factory_;
+    FrameStack stack_;
   public:
-    void Alloca(long *pointer, const char* type_specifier);
+    void Alloca(Pointer pointer, const char* type_specifier);
     void Return();
     void Call();
     void BlockEnd();

@@ -5,7 +5,7 @@
 #include "c-driver.hpp"
 
 extern "C" {
-  void alloca_handler(long* pointer, char* type_specifier) {
+  void alloca_handler(unsigned long* pointer, char* type_specifier) {
     cpp__alloca_handler(pointer, type_specifier);
   }
 
@@ -24,7 +24,7 @@ extern "C" {
 
 using namespace engine;
 
-void cpp__alloca_handler(long *pointer, char* type_specifier) {
+void cpp__alloca_handler(unsigned long* pointer, char* type_specifier) {
   GetEngine()->Alloca(pointer, type_specifier);
 }
 

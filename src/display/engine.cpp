@@ -12,16 +12,25 @@ namespace engine {
     return engine;
   }
   
-  void Engine::Alloca(long *pointer, const char* type_specifier) {
+  void Engine::Alloca(Pointer pointer, const char* type_specifier) {
+    assert (pointer not_eq nullptr
+	    and type_specifier not_eq nullptr);
     auto printer = factory_.GetPrinter(type_specifier);
+    assert (printer not_eq nullptr);
+    stack_.Push();
+    stack_.Emplace(pointer, printer);
   }
 
   void Engine::Return() {
+    stack_.Pop();
   }
   
   void Engine::Call() {
+    stack_.Push();
   }
   
   void Engine::BlockEnd() {
+    stack_.PrintTop(std::cout);
+    std::cout << std::endl;
   }
 };

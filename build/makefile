@@ -19,9 +19,9 @@ TRANSFORMER = $(TRANS_SRC:.cpp=.o)
 OBJ = $(ENGINE) $(TRANSFORMER)
 
 CXX = g++
-CXXFLAGS = -fdiagnostics-color=always -g -std=c++11 -fpic -rdynamic -Wno-deprecated
+CXXFLAGS = -fdiagnostics-color=always -g -std=c++1y -fpic -rdynamic -Wno-deprecated
 LDFLAGS = 
-LLVM_CXXDYNAMIC = $(filter-out -g -fno-exceptions -O2, $(shell llvm-config --cxxflags))
+LLVM_CXXDYNAMIC = $(filter-out -g -fno-exceptions -O2 -std=c++11, $(shell llvm-config --cxxflags))
 LLVM_LDDYNAMIC = $(shell llvm-config --ldflags)
 DBGFLAGS = -U NDEBUG
 CLANG = clang -S -emit-llvm -O0 -Wint-conversion

@@ -7,15 +7,16 @@
 
 #include <string>
 #include "engine.hpp"
+#include "declarations.hpp"
 
 extern "C" {
-  void alloca_handler(long* pointer, char* type_specifier);
+  void alloca_handler(unsigned long* pointer, char* type_specifier);
   void return_handler();
   void call_handler();
   void block_handler();
 }
 
-void cpp__alloca_handler(long *pointer, char* type_specifier);
+void cpp__alloca_handler(unsigned long* pointer, char* type_specifier);
 void cpp__return_handler();
 void cpp__call_handler();
 void cpp__block_handler();
