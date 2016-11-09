@@ -21,15 +21,15 @@ namespace engine {
   }
 
   void FrameStack::PrintTop(std::ostream &file) {
-    for_each(stack_.begin(), stack_.end(), [&] (auto top) {
+    for (auto it = stack_.begin(); it != stack_.end(); it++) {
+      auto top = *it;
+      file << " #frame " << it - stack_.begin() << ": ";
     std::for_each(top->begin(), top->end(), [&] (auto item) {
 	Pointer ptr = item.first;
 	PrinterPtr printer = item.second;
 	assert (ptr not_eq nullptr and printer not_eq nullptr);
 	printer->Print(file, ptr);
 	;});
-    if (top != stack_.back())
-      file << " #call: ";
-      });
+    }
   }
 };
