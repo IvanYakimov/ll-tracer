@@ -5,6 +5,14 @@
 #include "engine.hpp"
 
 namespace engine {
+  Engine::Engine() {
+    stack_.Push();
+  }
+
+  Engine::~Engine() {
+    assert (stack_.IsEmpty());
+  }
+  
   EnginePtr GetEngine() {
     static EnginePtr engine = nullptr;
     if (engine == nullptr)
@@ -17,7 +25,6 @@ namespace engine {
 	    and type_specifier not_eq nullptr);
     auto printer = factory_.GetPrinter(type_specifier);
     assert (printer not_eq nullptr);
-    stack_.Push();
     stack_.Emplace(pointer, printer);
   }
 

@@ -22,6 +22,7 @@ namespace engine {
     PrinterFactory factory_;
     FrameStack stack_;
   public:
+    Engine(); ~Engine();
     void Alloca(Pointer pointer, const char* type_specifier);
     void Return();
     void Call();

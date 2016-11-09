@@ -24,6 +24,7 @@ namespace engine {
     void Pop();
     void Emplace(Pointer, PrinterPtr);
     void PrintTop(std::ostream &file);
+    bool IsEmpty();
   };
 };
 
