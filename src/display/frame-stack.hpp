@@ -3,7 +3,7 @@
 
 // STL
 #include <iostream>
-#include <stack>
+#include <vector>
 #include <list>
 #include <map>
 #include <memory>
@@ -17,7 +17,7 @@ namespace engine {
   class FrameStack {
     using Frame = std::map<Pointer, PrinterPtr>;
     using FramePtr = std::shared_ptr<Frame>;
-    using TheStack = std::stack<FramePtr>;
+    using TheStack = std::vector<FramePtr>;
     TheStack stack_;
   public:
     void Push();

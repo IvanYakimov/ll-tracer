@@ -6,28 +6,30 @@ namespace engine {
   }
   
   void FrameStack::Push() {
-    stack_.push(std::make_shared<Frame>());
+    stack_.push_back(std::make_shared<Frame>());
   }
 
   void FrameStack::Pop() {
-    stack_.pop();
+    stack_.pop_back();
   }
 
   void FrameStack::Emplace(Pointer ptr, PrinterPtr printer) {
     assert (ptr not_eq nullptr and printer not_eq nullptr);
-    auto top = stack_.top();
+    auto top = stack_.back();
     assert (top->find(ptr) == top->end() and "pointer must be unique");
     top->emplace(ptr, printer);
   }
 
   void FrameStack::PrintTop(std::ostream &file) {
-    auto top = stack_.top();
-    file << "printing: " << top->size() << std::endl;
+    for_each(stack_.begin(), stack_.end(), [&] (auto top) {
     std::for_each(top->begin(), top->end(), [&] (auto item) {
 	Pointer ptr = item.first;
 	PrinterPtr printer = item.second;
 	assert (ptr not_eq nullptr and printer not_eq nullptr);
 	printer->Print(file, ptr);
 	;});
+    if (top != stack_.back())
+      file << " #call: ";
+      });
   }
 };
