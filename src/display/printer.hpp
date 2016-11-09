@@ -21,9 +21,9 @@ namespace engine {
   template<typename T>
   struct IntPrinter final : public Printer {
     virtual void Print(std::ostream& file, Pointer pointer) {
-      //      T val;
-      //std::memcpy(&val, pointer, sizeof(T));
-      file << *((T*)pointer) << " ";
+      T val;
+      std::memcpy(&val, pointer, sizeof(T));
+      file << val << " ";
     }
   };
 
