@@ -5,13 +5,12 @@
 SHELL = /bin/bash
 
 SRCDIR = ../src
-BENCH_DIR = ../bench
 
 BENCH_C = $(shell cd $(BENCH_DIR) && ls *.c)
 BENCH_IR = $(BENCH_C:.c=.ll)
 
 DISPLAY_SRC = $(shell cd $(SRCDIR)/display && ls *.cpp)
-ENGINE = $(DISPLAY_SRC:.cpp=.o)
+DISPLAY = $(DISPLAY_SRC:.cpp=.o)
 
 TRANS_SRC = $(shell cd $(SRCDIR)/trans && ls *.cpp)
 TRANSFORMER = $(TRANS_SRC:.cpp=.o)
@@ -24,14 +23,14 @@ LDFLAGS =
 LLVM_CXXDYNAMIC = $(filter-out -g -fno-exceptions -O2 -std=c++11, $(shell llvm-config --cxxflags))
 LLVM_LDDYNAMIC = $(shell llvm-config --ldflags)
 DBGFLAGS = -U NDEBUG
-CLANG = clang -S -emit-llvm -O0 -Wint-conversion
 
 vpath %.cpp $(SRCDIR)/display $(SRCDIR)/trans
-vpath %.c $(BENCH_DIR)
-vpath %.ll .
 
-trans.so: trans.o
+transformer.so: trans.o
 	$(CXX) -shared $< -o $@ $(CXXFLAGS)
+
+driver.a: $(DISPLAY)
+	ar rcs $@ $^
 
 trans.o: $(TRANSFORMER) 
 	ld -r $^ -o $@ $(LLVM_LDDYNAMIC)
@@ -43,32 +42,12 @@ $(OBJ):
 %.o: %.cpp %.hpp
 	$(CXX) -c $< -o $@ $(CXXFLAGS)
 
-$(BENCH_IR):
-%.ll: %.c
-	$(CLANG) -c $< -o $@
-
-.PHONY: display-objects
-display: $(ENGINE)
-	@echo "done"
-
-dummy.o:
-	clang -c dummy.ll -o dummy.o
-
-# TODO: replace dummy.o by some meaningful
-display.out: $(ENGINE) dummy.o
-	$(CXX) $^ -o $@ $(CXXFLAGS)
-
 .PHONY: clean
 clean:
 	@rm -vf $(SRCDIR)/trans/*~
 	@rm -vf $(SRCDIR)/display/*~	
-	@rm -vf $(BENCH_DIR)/*~
 	@rm -vf *~ *.o *.out *.so
-	@rm -vf *.ll 
 	@rm -vf \#*\#
-
-%.ll: %.c
-	$(CLANG) $<
 
 
 
