@@ -48,13 +48,3 @@ clean:
 	@rm -vf $(SRCDIR)/display/*~	
 	@rm -vf *~ *.o *.out *.so
 	@rm -vf \#*\#
-
-
-
-
-
-
-
-
-
-
