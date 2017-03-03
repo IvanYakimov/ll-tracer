@@ -1,5 +1,3 @@
-#include "sort-drive.h"
-
 int * sort(int array[], int n) {
   for(int x=0; x<n; x++) {
     int index_of_min = x;

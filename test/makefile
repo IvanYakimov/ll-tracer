@@ -5,7 +5,7 @@
 SHELL = /bin/bash
 CLANG = clang -S -emit-llvm -O0 -Wint-conversion
 
-vpath %.c $(BENCH_DIR)
+vpath %.c .
 vpath %.ll .
 
 $(BENCH_IR):
@@ -17,4 +17,4 @@ $(BENCH_IR):
 
 .PHONY: clean
 clean:
-	@rm -vf *~ *.ll *.out
+	@rm -vf *~ *.ll *.out \#*\# *.o *.trace

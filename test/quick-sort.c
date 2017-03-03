@@ -1,4 +1,3 @@
-#include "quick-sort.h"
 
 void swap(int intArray[], int num1, int num2) {
    int temp = intArray[num1];
