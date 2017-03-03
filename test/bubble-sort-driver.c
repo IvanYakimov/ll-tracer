@@ -1,5 +1,3 @@
-#include "bubble-sort.c"
-
 void runner0()
 {
 	int arg1[] = {6, 6, 6, 6};
@@ -194,4 +192,3 @@ int main(){
 	runner22();
 	runner23();
 }
-//generated
