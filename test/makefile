@@ -17,4 +17,4 @@ $(BENCH_IR):
 
 .PHONY: clean
 clean:
-	@rm -vf *~ *.ll *.out \#*\# *.o *.trace tmp.c 
+	@rm -vf *~ *.ll *.out \#*\# *.o *.trace *-tmp.c 

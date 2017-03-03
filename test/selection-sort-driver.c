@@ -1,5 +1,3 @@
-#include "selection-sort.c"
-
 void runner0()
 {
   int arg1[] = {1, 2, 3, 10};

@@ -1,5 +1,3 @@
-#include "quick-sort.c"
-
 void runner0()
 {
 	int arg1[] = {6, 6, -8, 6};

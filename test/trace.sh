@@ -1,16 +1,13 @@
 #!/bin/bash
 
-if [[ -z $1 ]]; then
-    echo "File name expected."
-    exit
-fi
+#TODO: arguments parsing
 
 sort=$1
 data=$2
-target=$3
+target=$1-$2
 
-make clean
-cat $sort $data > $target-tmp.c
+./update.sh
+cat $sort-sort.c $data-sort-driver.c > $target-tmp.c
 make $target-tmp.ll
 cat $target-tmp.ll | ./zond.sh
 cp dummy.ll $target-transformed.ll
